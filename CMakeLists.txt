@@ -41,10 +41,10 @@ else()
     set(UNITY_PATH lib/unity)
 endif()
 
-if(DEFINED ENV{can_PATH})
-    set(can_PATH $ENV{can_PATH})
+if(DEFINED ENV{CAN_PATH_PATH})
+    set(CAN_PATH $ENV{can_PATH})
 else()
-    set(can_PATH lib/can2040)
+    set(CAN_PATH lib/can2040)
 endif()
 
 # ====================================================================================
@@ -67,7 +67,7 @@ include(${FREERTOS_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.c
 include(unity.cmake)
 
 #include can library.
-include(lib/can2040/can2040.cmake)
+include(${CAN_PATH}/can2040.cmake)
 
 # This defines your project name, you can name it anything you want.
 project(myproject C CXX ASM)
