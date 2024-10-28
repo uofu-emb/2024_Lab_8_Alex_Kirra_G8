@@ -41,6 +41,12 @@ else()
     set(UNITY_PATH lib/unity)
 endif()
 
+if(DEFINED ENV{can_PATH})
+    set(can_PATH $ENV{can_PATH})
+else()
+    set(can_PATH lib/can2040)
+endif()
+
 # ====================================================================================
 cmake_minimum_required(VERSION 3.13)
 
@@ -59,6 +65,9 @@ include(${FREERTOS_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.c
 
 # This sets up the unity library. They don't provide a library export, so it's defined locally.
 include(unity.cmake)
+
+#include can library.
+include(can.cmake)
 
 # This defines your project name, you can name it anything you want.
 project(myproject C CXX ASM)
