@@ -67,7 +67,7 @@ include(${FREERTOS_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.c
 include(unity.cmake)
 
 #include can library.
-include($[can_PATH]/can2040.cmake)
+include(lib/can2040/can2040.cmake)
 
 # This defines your project name, you can name it anything you want.
 project(myproject C CXX ASM)
