@@ -44,8 +44,8 @@ struct can2040_msg msg;
     msg.data[0] = 'c'; // Character to transmit
 
     while (1) {
-        can2040_transmit(&cbus, &msg);
-        sleep_ms(1000); // Delay for 1 second between transmissions
+        can2040_transmit(&cbus,&msg);
+        sleep_ms(1000);
     }
 
 
