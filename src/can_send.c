@@ -7,6 +7,7 @@ static struct can2040 cbus;
 
 static void can2040_cb(struct can2040 *cd, uint32_t notify, struct can2040_msg *msg)
 {
+    printf("callback\n");
     // Put your code here....
 }
 
@@ -36,19 +37,23 @@ void canbus_setup(void)
 
 void main(void){
 
+    stdio_init_all();
+
      canbus_setup();
 
 struct can2040_msg msg;
-    msg.id = 0x123; // Set your desired CAN ID
+    msg.id = 0x1; // Set your desired CAN ID
     msg.dlc = 1;    // Length of the message
-    msg.data[0] = 'c'; // Character to transmit
-
+    msg.data[0] = 0x01; // Character to transmit
+    int i;
+    sleep_ms(10000);
     while (1) {
-        can2040_transmit(&cbus,&msg);
-        sleep_ms(1000);
+        i = can2040_check_transmit(&cbus);
+
+        printf("check %d\n",i);
+        i = can2040_transmit(&cbus,&msg);
+  
+        printf("transmit%d\n",i);
+        sleep_ms(1000); 
     }
-
-
-
-    
 }
