@@ -11,6 +11,7 @@ static struct can2040 cbus;
 QueueHandle_t msgs;
 static void can2040_cb(struct can2040 *cd, uint32_t notify, struct can2040_msg *msg)
 {
+    printf("callback\n");
     xQueueSendToBack(msgs, msg, portMAX_DELAY);
 }
 
@@ -40,9 +41,11 @@ void canbus_setup(void)
 
 void main_task(__unused void *params)
 {
+    for(;;){
     struct can2040_msg data;
     xQueueReceive(msgs, &data, portMAX_DELAY);
     printf("Got message\n");
+    }
 }
 
 int main(void)
