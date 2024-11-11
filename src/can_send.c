@@ -2,13 +2,16 @@
 #include <hardware/regs/intctrl.h>
 #include <stdio.h>
 #include <pico/stdlib.h>
+#include <FreeRTOS.h>
+#include <task.h>
+#include <queue.h>
 
 static struct can2040 cbus;
+QueueHandle_t msgs;
 
 static void can2040_cb(struct can2040 *cd, uint32_t notify, struct can2040_msg *msg)
 {
-    printf("callback\n");
-    // Put your code here....
+    printf("Got message from low priority\n");
 }
 
 static void PIOx_IRQHandler(void)
@@ -35,25 +38,40 @@ void canbus_setup(void)
     can2040_start(&cbus, sys_clock, bitrate, gpio_rx, gpio_tx);
 }
 
+void main_task(__unused void *params)
+{
+    for(;;){
+    struct can2040_msg data;
+    xQueueReceive(msgs, &data, portMAX_DELAY);
+    printf("Got message from low priority\n");
+    }
+}
+
 void main(void){
 
     stdio_init_all();
-
+    msgs = xQueueCreate(100, sizeof(struct can2040_msg));
      canbus_setup();
+
+    //  TaskHandle_t task;
+    // xTaskCreate(main_task, "MainThread",
+    //             configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1UL, &task);
+    // vTaskStartScheduler();
 
 struct can2040_msg msg;
     msg.id = 0x1; // Set your desired CAN ID
     msg.dlc = 1;    // Length of the message
     msg.data[0] = 0x01; // Character to transmit
-    int i;
-    sleep_ms(10000);
+    int i,j;
+    j =100;
+    sleep_ms(1000);
     while (1) {
         i = can2040_check_transmit(&cbus);
 
-        printf("check %d\n",i);
         i = can2040_transmit(&cbus,&msg);
   
-        printf("transmit%d\n",i);
-        sleep_ms(1000); 
+        printf("transmit high priority%d\n",i);
+        sleep_ms(j);
+        j++; 
     }
 }
