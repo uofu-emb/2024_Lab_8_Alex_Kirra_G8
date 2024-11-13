@@ -11,6 +11,7 @@ QueueHandle_t msgs;
 
 static void can2040_cb(struct can2040 *cd, uint32_t notify, struct can2040_msg *msg)
 {
+    //print that the callback was called
     printf("Got message from low priority\n");
 }
 
@@ -53,25 +54,22 @@ void main(void){
     msgs = xQueueCreate(100, sizeof(struct can2040_msg));
      canbus_setup();
 
-    //  TaskHandle_t task;
-    // xTaskCreate(main_task, "MainThread",
-    //             configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1UL, &task);
-    // vTaskStartScheduler();
-
+//setup the can message high prioirty
 struct can2040_msg msg;
-    msg.id = 0x1; // Set your desired CAN ID
+    msg.id = 0x01; // Set your desired CAN ID
     msg.dlc = 1;    // Length of the message
     msg.data[0] = 0x01; // Character to transmit
     int i,j;
-    j =100;
+    j =10;
     sleep_ms(1000);
     while (1) {
         i = can2040_check_transmit(&cbus);
 
         i = can2040_transmit(&cbus,&msg);
   
-        printf("transmit high priority%d\n",i);
+        //printf("transmit high priority%d\n",i);
         sleep_ms(j);
+        //increase the sleep
         j++; 
     }
 }

@@ -53,10 +53,7 @@ int main(void)
     stdio_init_all();
     msgs = xQueueCreate(100, sizeof(struct can2040_msg));
     canbus_setup();
-    // TaskHandle_t task;
-    // xTaskCreate(main_task, "MainThread",
-    //             configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1UL, &task);
-    // vTaskStartScheduler();
+    //set up the low priority message.
     struct can2040_msg msg;
     msg.id = 0x10; // Set your desired CAN ID
     msg.dlc = 1;    // Length of the message
@@ -68,7 +65,7 @@ int main(void)
 
         i = can2040_transmit(&cbus,&msg);
   
-        printf("transmit low priority%d\n",i);
-        sleep_ms(1000); 
+       // printf("transmit low priority%d\n",i);
+        sleep_ms(100); 
     }
 }
