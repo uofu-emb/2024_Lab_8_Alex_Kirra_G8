@@ -39,14 +39,7 @@ void canbus_setup(void)
     can2040_start(&cbus, sys_clock, bitrate, gpio_rx, gpio_tx);
 }
 
-void main_task(__unused void *params)
-{
-    for(;;){
-    struct can2040_msg data;
-    xQueueReceive(msgs, &data, portMAX_DELAY);
-    printf("Got message from low priority\n");
-    }
-}
+
 
 void main(void){
 
